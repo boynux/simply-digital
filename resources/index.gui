@@ -1,0 +1,60 @@
+<svg viewport-fill="#111111">
+ 
+  <svg x="12" y="6" width="100%-6" height="100%-12">
+    <svg x="0" y="0" width="100%" height="30%">
+      <image id="disconnect" x="6" y="12" width="16" height="16" href="disconnect.png" />
+
+      <text id="clock-wd" x="32%" y="100%"
+            font-family="Colfax-Thin" fill="white"
+            font-size="42" text-anchor="end">wed</text>
+      <text id="clock-day" x="50%" y="100%"
+            font-family="Colfax-Thin" fill="white"
+            font-size="68"
+            text-anchor="middle" text-length="20">20</text>
+      <text id="clock-year" x="66%" y="100%"
+            font-family="Colfax-Light" fill="white"
+            font-size="18"
+            text-anchor="start">2018</text>
+      <text id="clock-month" x="66%" y="$-40"
+            font-family="Colfax-Light" fill="white"
+            font-size="18"
+            text-anchor="start">dec</text>
+    </svg>
+  
+    <line x1="-12" y1="$+6%" x2="100%" y2="$+6%" fill="gray" stroke-width="2" />
+  
+    <svg x="2%" y="$+12%" width="90%" height="68">
+      <text id="clock-hour" x="30%" y="50%"
+            font-family="Colfax-Regular" fill="white"
+            font-size="68" font-weight="bold"
+            text-anchor="end" text-length="20">88</text>
+      <text x="33%" y="50% - 5"
+            font-family="Colfax-Regular" fill="white"
+            font-size="60" font-weight="bold"
+            text-anchor="middle" text-length="20">:</text>
+       <text id="clock-min" x="$+15%" y="50%"
+            font-family="Colfax-Regular" fill="white"
+            font-size="68" font-weight="bold"
+            text-anchor="middle">88</text>
+       <text x="100%-32%" y="50% - 5"
+            font-family="Colfax-Regular" fill="white"
+            font-size="60" font-weight="bold"
+            text-anchor="middle" text-length="20">:</text>
+       <text id="clock-sec" x="$" y="50%"
+            font-family="Colfax-Regular" fill="white"
+            font-size="68" font-weight="bold"
+            text-anchor="start" text-length="20">88</text>
+    </svg>
+    <line x1="-12" y1="$-14" x2="100%" y2="$-14" fill="gray" stroke-width="2" />
+  
+    <svg x="0" y="$+12%" width="100%" height="68">
+      <text id="battery" x="50% - 8" y="50%"
+            font-family="Colfax-Thin" fill="white"
+            font-size="68" font-weight="bold"
+            text-anchor="middle" text-length="20">88</text>
+      <text x="72%" y="$-100" font-family="Colfax-Light" fill="white"
+            font-size="40" text-anchor="middle" text-length="20">%</text>
+    </svg>
+  
+  </svg>
+</svg>
