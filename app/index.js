@@ -22,6 +22,7 @@ let disconnect = document.getElementById('disconnect');
 const days = ['sat', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri'];
 const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 
+let lastState = null;
 
 // Returns an angle (0-360) for the current hour in the day, including minutes
 function hoursToAngle(hours, minutes) {
@@ -41,6 +42,16 @@ function secondsToAngle(seconds) {
   return (360 / 60) * seconds;
 }
 
+setInterval(() => {
+  if(lastState != peerSocket.readyState) {
+    if (peerSocket.readyState === peerSocket.CLOSED) {
+      vibration.start("ping");
+    }
+  }
+
+  lastState = peerSocket.readyState;
+}, 10000);
+
 // Rotate the hands every tick
 function updateClock(evt) {
   let today = evt.date;
@@ -58,10 +69,9 @@ function updateClock(evt) {
   clockMonth.text = months[today.getMonth()];
   
   batteryText.text = Math.floor(battery.chargeLevel);
-  
-  if (peerSocket.readyState === peerSocket.CLOSED) {
-    vibration.start("ping");
-    disconnect.style.visibility = "visible"
+
+  if (lastState == peerSocket.CLOSED) {
+    disconnect.style.visibility = "visible";
   } else {
     disconnect.style.visibility = "hidden";
   }
