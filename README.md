@@ -3,7 +3,7 @@ Fitbit Versa Watch Face
 
 # Face
 
-![Versa](https://raw.githubusercontent.com/boynux/simply-digital/master/docs/images/screeshot.png)
+![Versa](https://github.com/boynux/simply-digital/blob/master/docs/images/screenshot.png)
 
 # Try it
 
