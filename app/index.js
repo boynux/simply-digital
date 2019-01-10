@@ -19,7 +19,7 @@ let clockDay = document.getElementById('clock-day');
 let batteryText = document.getElementById('battery');
 let disconnect = document.getElementById('disconnect');
 
-const days = ['sat', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri'];
+const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 
 let lastState = null;
