@@ -4,6 +4,8 @@ import { battery } from "power";
 import { peerSocket } from "messaging";
 import { vibration } from "haptics";
 import * as messaging from "messaging";
+import * as settingsHandler from "./settings";
+
 
 // Update the clock every second
 clock.granularity = "seconds";
@@ -27,7 +29,14 @@ let interval = null;
 let connected = true;
 let settings = {
   disconnectWarning: false,
-}
+  twelveHours: false,
+};
+
+settingsHandler.initialize((data) => {
+  if(data) {
+    settings = data;
+  }
+});
 
 function updateSettings(settings) {
   if(settings.disconnectWarning) {
@@ -57,7 +66,9 @@ function updateClock(evt) {
   let mins = today.getMinutes();
   let secs = today.getSeconds();
   
-  clockHour.text = ("0" + today.getHours()).slice(-2);
+  let hours = settings.twelveHours ? today.getHours() % 12 : today.getHours();
+
+  clockHour.text = ("0" + hours).slice(-2);
   clockMin.text = ("0" + today.getMinutes()).slice(-2);
   clockSec.text = ("0" + today.getSeconds()).slice(-2);
   
@@ -84,15 +95,6 @@ messaging.peerSocket.onopen = function() {
 // Listen for the onerror event
 messaging.peerSocket.onerror = function(err) {
   connected = false;
-}
-
-// Listen for the onmessage event
-messaging.peerSocket.onmessage = function(evt) {
-  // Output the message to the console
-  console.log(JSON.stringify(evt.data));
-
-  settings = evt.data;
-  updateSettings(settings);
 }
 
 // Update the clock every tick event
