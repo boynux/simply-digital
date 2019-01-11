@@ -3,6 +3,7 @@ import document from "document";
 import { battery } from "power";
 import { peerSocket } from "messaging";
 import { vibration } from "haptics";
+import * as messaging from "messaging";
 
 // Update the clock every second
 clock.granularity = "seconds";
@@ -22,38 +23,35 @@ let disconnect = document.getElementById('disconnect');
 const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 
-let lastState = null;
-
-// Returns an angle (0-360) for the current hour in the day, including minutes
-function hoursToAngle(hours, minutes) {
-  let hourAngle = (360 / 12) * hours;
-  let minAngle = (360 / 12 / 60) * minutes;
-  return hourAngle + minAngle;
+let interval = null;
+let connected = true;
+let settings = {
+  disconnectWarning: false,
 }
 
-// Returns an angle (0-360) for minutes
-function minutesToAngle(minutes) {
-  return (360 / 60) * minutes;
-}
+function updateSettings(settings) {
+  if(settings.disconnectWarning) {
+    if(interval == null) {
+      interval = setInterval(() => {
+        let currentState = peerSocket.readyState == peerSocket.CLOSED ? false : true;
+        // console.log("Connected: " + currentState);
+        if(currentState != connected) {
+          if (currentState == false) {
+            vibration.start("ping");
+          }
+        }
 
-
-// Returns an angle (0-360) for seconds
-function secondsToAngle(seconds) {
-  return (360 / 60) * seconds;
-}
-
-setInterval(() => {
-  if(lastState != peerSocket.readyState) {
-    if (peerSocket.readyState === peerSocket.CLOSED) {
-      vibration.start("ping");
+        connected = currentState;
+     }, 5000);
     }
+  } else if (interval != null) {
+    clearInterval(interval);
+    interval = null;
   }
-
-  lastState = peerSocket.readyState;
-}, 10000);
+}
 
 // Rotate the hands every tick
-function updateClock(evt) {
+function updateClock(evt) {  
   let today = evt.date;
   let hours = today.getHours() % 12;
   let mins = today.getMinutes();
@@ -70,11 +68,31 @@ function updateClock(evt) {
   
   batteryText.text = Math.floor(battery.chargeLevel);
 
-  if (lastState == peerSocket.CLOSED) {
-    disconnect.style.visibility = "visible";
-  } else {
+  if (connected || !settings.disconnectWarning) {
     disconnect.style.visibility = "hidden";
+  } else {
+    disconnect.style.visibility = "visible";
   }
+}
+
+// Listen for the onopen event
+messaging.peerSocket.onopen = function() {
+  // Ready to send messages
+  connected = true;
+}
+
+// Listen for the onerror event
+messaging.peerSocket.onerror = function(err) {
+  connected = false;
+}
+
+// Listen for the onmessage event
+messaging.peerSocket.onmessage = function(evt) {
+  // Output the message to the console
+  console.log(JSON.stringify(evt.data));
+
+  settings = evt.data;
+  updateSettings(settings);
 }
 
 // Update the clock every tick event
