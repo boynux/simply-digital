@@ -5,7 +5,9 @@ import { peerSocket } from "messaging";
 import { vibration } from "haptics";
 import * as messaging from "messaging";
 import * as settingsHandler from "./settings";
+import { preferences } from "user-settings";
 
+console.log(preferences.clockDisplay);
 
 // Update the clock every second
 clock.granularity = "seconds";
@@ -26,19 +28,22 @@ const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 
 let interval = null;
-let connected = true;
+let connected = false;
 let settings = {
   disconnectWarning: false,
-  twelveHours: false,
 };
 
 settingsHandler.initialize((data) => {
   if(data) {
-    settings = data;
+    updateSettings(data);
   }
 });
 
-function updateSettings(settings) {
+function updateSettings(newSettings) {
+  Object.keys(newSettings).forEach(key => {
+    settings[key] = newSettings[key];
+  });
+
   if(settings.disconnectWarning) {
     if(interval == null) {
       interval = setInterval(() => {
@@ -62,11 +67,15 @@ function updateSettings(settings) {
 // Rotate the hands every tick
 function updateClock(evt) {  
   let today = evt.date;
-  let hours = settings.twelveHours && today.get() > 12 ?
+  let hours = ("0" + today.getHours()).slice(-2);
+
+  if(preferences.clockDisplay == '12h') {
+    hours = today.getHours() > 12 ?
     today.getHours() % 12 :
     today.getHours();
+  }
 
-  clockHour.text = ("0" + hours).slice(-2);
+  clockHour.text = hours;
   clockMin.text = ("0" + today.getMinutes()).slice(-2);
   clockSec.text = ("0" + today.getSeconds()).slice(-2);
   

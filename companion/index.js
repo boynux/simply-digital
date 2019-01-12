@@ -5,11 +5,9 @@ let settings = loadSettings();
 
 function loadSettings() {
   let disconnectWarning = settingsStorage.getItem("disconnect-warning");
-  let twelveHours = settingsStorage.getItem("12hours");
   
    return {
     disconnectWarning: disconnectWarning == "true" ? true : false,
-    twelveHours: twelveHours == "true" ? true : false,
   };
 }
 

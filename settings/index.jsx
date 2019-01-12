@@ -1,13 +1,6 @@
-function HelloWorld(props) {
+function Settings(props) {
     return (
       <Page>
-        <Section
-          title={<Text bold align="center">Clock Settings</Text>}>
-          <Toggle
-            settingsKey="12hours"
-            label="12 Hours"
-          />
-        </Section>
         <Section
           title={<Text bold align="center">Other Settings</Text>}>
           <Toggle
@@ -19,4 +12,4 @@ function HelloWorld(props) {
     );
   }
   
-  registerSettingsPage(HelloWorld);
+  registerSettingsPage(Settings);
