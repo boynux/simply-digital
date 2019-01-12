@@ -62,11 +62,9 @@ function updateSettings(settings) {
 // Rotate the hands every tick
 function updateClock(evt) {  
   let today = evt.date;
-  let hours = today.getHours() % 12;
-  let mins = today.getMinutes();
-  let secs = today.getSeconds();
-  
-  let hours = settings.twelveHours ? today.getHours() % 12 : today.getHours();
+  let hours = settings.twelveHours && today.get() > 12 ?
+    today.getHours() % 12 :
+    today.getHours();
 
   clockHour.text = ("0" + hours).slice(-2);
   clockMin.text = ("0" + today.getMinutes()).slice(-2);
