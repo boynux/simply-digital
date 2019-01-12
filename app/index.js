@@ -1,13 +1,11 @@
 import clock from "clock";
 import document from "document";
 import { battery } from "power";
-import { peerSocket } from "messaging";
-import { vibration } from "haptics";
 import { preferences } from "user-settings";
 
 import * as settingsHandler from "./settings";
 import * as monitor from "./monitor";
-import * as utils from "./utils";
+import * as utils from "../common/utils";
 
 // Update the clock every second
 clock.granularity = "seconds";
@@ -23,8 +21,6 @@ let clockDay = document.getElementById('clock-day');
 
 let batteryText = document.getElementById('battery');
 let disconnect = document.getElementById('disconnect');
-
-let interval = null;
 
 const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
@@ -69,7 +65,7 @@ function updateClock(evt) {
   
   batteryText.text = Math.floor(battery.chargeLevel);
 
-  if (connected || !settings.disconnectWarning) {
+  if (monitor.isConnected() || !settings.disconnectWarning) {
     disconnect.style.visibility = "hidden";
   } else {
     disconnect.style.visibility = "visible";

@@ -1,6 +1,9 @@
 import * as messaging from "messaging";
+import { peerSocket } from "messaging";
+import { vibration } from "haptics";
 
 let connected = false;
+let interval = null;
 
 export function setup(enabled = false) {
     if(enabled) {
@@ -13,12 +16,16 @@ export function setup(enabled = false) {
       }
 }
 
+export function isConnected() {
+    return connected;
+}
+
 function alert() {
     let currentState = peerSocket.readyState == peerSocket.CLOSED ? false : true;
     // console.log("Connected: " + currentState);
     if(currentState != connected) {
         if (currentState == false) {
-        vibration.start("ping");
+            vibration.start("ping");
         }
     }
 
