@@ -4,8 +4,11 @@ import { battery } from "power";
 import { peerSocket } from "messaging";
 import { vibration } from "haptics";
 import * as messaging from "messaging";
-import * as settingsHandler from "./settings";
 import { preferences } from "user-settings";
+
+import * as settingsHandler from "./settings";
+import * as utils from "./utils";
+
 
 console.log(preferences.clockDisplay);
 
@@ -67,7 +70,7 @@ function updateSettings(newSettings) {
 // Rotate the hands every tick
 function updateClock(evt) {  
   let today = evt.date;
-  let hours = ("0" + today.getHours()).slice(-2);
+  let hours = utils.zeroPad(today.getHours());
 
   if(preferences.clockDisplay == '12h') {
     hours = today.getHours() > 12 ?
@@ -76,11 +79,11 @@ function updateClock(evt) {
   }
 
   clockHour.text = hours;
-  clockMin.text = ("0" + today.getMinutes()).slice(-2);
-  clockSec.text = ("0" + today.getSeconds()).slice(-2);
+  clockMin.text = utils.zeroPad(today.getMinutes());
+  clockSec.text = utils.zeroPad(today.getSeconds());
   
   clockYear.text = today.getFullYear();
-  clockDay.text = ("0" + today.getDate()).slice(-2);
+  clockDay.text = utils.zeroPad(today.getDate());
   clockWD.text = days[today.getDay()];
   clockMonth.text = months[today.getMonth()];
   
